@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  metrics:
+  - name: success-rate
+    interval: 5s
+    count: 3
+    successCondition: result == "true"
+    provider:
+      job:
+        spec:
+          backoffLimit: 0
+          template:
+            spec:
+              containers:
+              - name: success-check
+                image: alpine:3.18
+                command: [sh, -c, "echo true"]
+              restartPolicy: Never
